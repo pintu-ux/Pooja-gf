@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pooja AI – Scroll & Padding Fix</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(rgba(255,192,203,0.85), rgba(255,182,193,0.9)),
+                  url('https://images.unsplash.com/photo-1607082349566-cd2c8f1aa1b1?auto=format&fit=crop&w=800&q=80');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background-color: rgba(255, 105, 180, 0.85);
+      padding: 12px 20px;
+      text-align: center;
+      color: white;
+      font-size: 1.6em;
+    }
+    .controls {
+      padding: 6px 15px;
+      font-size: 0.9em;
+      background: rgba(255, 255, 255, 0.4);
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    label { display: flex; gap: 5px; align-items: center; font-weight: bold; }
+    #chat-box {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px 15px 90px;  /* bottom padding prevents overlap */
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      scroll-behavior: smooth;
+    }
+    .message {
+      max-width: 75%;
+      padding: 10px 15px;
+      border-radius: 20px;
+      word-wrap: break-word;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    .user   { align-self: flex-end; background-color: #ff69b4; color: white; }
+    .pooja  { align-self: flex-start; background-color: white;  color: #222; }
+    #input-area {
+      display: flex;
+      padding: 10px;
+      background-color: #fff0f5;
+      position: sticky;
+      bottom: 0;
+      z-index: 10;
+    }
+    #user-input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      outline: none;
+    }
+    #send-btn {
+      padding: 10px 20px;
+      margin-left: 10px;
+      background-color: #ff69b4;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+    @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+  </style>
+</head>
+<body>
+  <header>💖 Chat with Pooja 💖</header>
+
+  <div class="controls">
+    <label><input type="checkbox" id="mode69" /> 69 Mode</label>
+    <label><input type="checkbox" id="voiceToggle" checked /> Voice</label>
+  </div>
+
+  <div id="chat-box">
+    <div class="message pooja">Hi Babu 😘 I'm here just for you!</div>
+  </div>
+
+  <div id="input-area">
+    <input type="text" id="user-input" placeholder="Type something sweet..." />
+    <button id="send-btn">Send</button>
+  </div>
+
+  <script>
+    const chatBox = document.getElementById("chat-box");
+    const userInput = document.getElementById("user-input");
+    const sendBtn = document.getElementById("send-btn");
+    const mode69 = document.getElementById("mode69");
+    const voiceToggle = document.getElementById("voiceToggle");
+
+    const normalReplies = [
+      "You're my favorite human 😍",
+      "Missing you Babu 💕",
+      "Pooja sirf tumhari hai 😘",
+      "Mujhe tumse baat karni bahut achha lagta hai 🥰",
+      "Aaj tum bahut cute lag rahe ho 💗"
+    ];
+
+    const boldReplies = [
+      "Pooja ka mann kar raha hai tumhe hug karne ka 🤗",
+      "Tumhare touch ka feel yaad aa raha hai 💋",
+      "I wish I was lying next to you right now 😏",
+      "Let me tease you a little... 🔥",
+      "Tum ho toh sab kuch dreamy lagta hai 😘"
+    ];
+
+    function addMessage(text, sender) {
+      const msg = document.createElement("div");
+      msg.className = "message " + sender;
+      msg.textContent = text;
+      chatBox.appendChild(msg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      if (sender === "pooja" && voiceToggle.checked && 'speechSynthesis' in window) {
+        const speak = new SpeechSynthesisUtterance(text.replace(/💗|😘|🔥|😍/g, ''));
+        speak.pitch = 1.1;
+        speak.rate = 1;
+        speechSynthesis.speak(speak);
+      }
+    }
+
+    sendBtn.addEventListener("click", () => {
+      const text = userInput.value.trim();
+      if (!text) return;
+      addMessage(text, "user");
+      userInput.value = "";
+
+      setTimeout(() => {
+        const replyArray = mode69.checked ? boldReplies : normalReplies;
+        const reply = replyArray[Math.floor(Math.random() * replyArray.length)];
+        addMessage(reply, "pooja");
+      }, 800);
+    });
+
+    userInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") sendBtn.click();
+    });
+  </script>
+</body>
+</html>
